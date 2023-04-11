@@ -2,10 +2,14 @@ lockfileVersion: 5.4
 
 specifiers:
   '@nuxtjs/apollo': 5.0.0-alpha.6
+  '@nuxtjs/google-fonts': 3.0.0
+  normalize.css: ^8.0.1
   nuxt: ^3.3.2
 
 dependencies:
   '@nuxtjs/apollo': 5.0.0-alpha.6
+  '@nuxtjs/google-fonts': 3.0.0
+  normalize.css: 8.0.1
 
 devDependencies:
   nuxt: 3.3.2
@@ -848,6 +852,17 @@ packages:
       - supports-color
       - typescript
       - vue
+    dev: false
+
+  /@nuxtjs/google-fonts/3.0.0:
+    resolution: {integrity: sha512-knP2CJFkMHGQ9pepVNwquXvqiIHDma/6yZNXiYk7WWatRbbQUPf2423vXiBYu267Mff2KMuDLoAJ1Dsv2ymhdQ==}
+    dependencies:
+      '@nuxt/kit': 3.3.2
+      google-fonts-helper: 3.2.4
+      pathe: 1.1.0
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
     dev: false
 
   /@rollup/plugin-alias/4.0.3_rollup@3.20.2:
@@ -1877,7 +1892,6 @@ packages:
   /deepmerge/4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /defaults/1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
@@ -2340,6 +2354,15 @@ packages:
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
+
+  /google-fonts-helper/3.2.4:
+    resolution: {integrity: sha512-M740UjqBOxmG2qFUW7Lhgak9WDpsT18zxLJuG+MP4r+G1vhqbWm3x3D40xFEzhveQAneaEr8WjPxf+vcx9Xohg==}
+    dependencies:
+      deepmerge: 4.3.1
+      hookable: 5.5.2
+      ofetch: 1.0.1
+      ufo: 1.1.1
+    dev: false
 
   /graceful-fs/4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
@@ -3094,6 +3117,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /normalize.css/8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
+    dev: false
+
   /npm-run-path/4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -3210,7 +3237,6 @@ packages:
       destr: 1.2.2
       node-fetch-native: 1.0.2
       ufo: 1.1.1
-    dev: true
 
   /ohash/1.0.0:
     resolution: {integrity: sha512-kxSyzq6tt+6EE/xCnD1XaFhCCjUNUaz3X30rJp6mnjGLXAAvuPFqohMdv0aScWzajR45C29HyBaXZ8jXBwnh9A==}

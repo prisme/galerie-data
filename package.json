@@ -12,6 +12,8 @@
     "nuxt": "^3.3.2"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "5.0.0-alpha.6"
+    "@nuxtjs/apollo": "5.0.0-alpha.6",
+    "@nuxtjs/google-fonts": "3.0.0",
+    "normalize.css": "^8.0.1"
   }
 }
