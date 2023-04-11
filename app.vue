@@ -1,3 +1,3 @@
 <template>
-  <div><ComingSoon /></div>
+  <div><NFTCollection /></div>
 </template>
