@@ -118,8 +118,11 @@ const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { wallet
 
 // watch the input field for changes & update the data
 watch(refWallet, (value) => {
-  const { result } = useQuery(collectionQuery, { walletAddress: value, limit });
-  data.value = result.value;
+  const { onResult } = useQuery(collectionQuery, { walletAddress: value, limit });
+
+  onResult((result) => {
+    data.value = result.data;
+  });
 });
 
 // transform the data to make it easier to use in the template
