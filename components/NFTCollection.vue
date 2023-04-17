@@ -7,21 +7,36 @@
     </div>
 
     <div>
-      <h2>artist</h2>
+      <h2>creator</h2>
       <a :href="`https://objkt.com/profile/${creator?.address}`">{{ creator?.alias }}</a>
       <p>{{ creator?.description }}</p>
     </div>
 
     <h2>tokens</h2>
-    <div v-for="nft in transformedNfts" :key="nft.token_id">
-      <img :src="nft.thumbnail_uri" :alt="nft.name" />
-      <div>{{ nft.name }}</div>
-      <div>{{ nft.listings_active.price_xtz }}</div>
+    <div v-for="token in transformedTokens" :key="token.token_id" class="token">
+      <a :href="token.url" target="_blank">
+        <img :src="token.thumbnail_uri" :alt="token.name" />
+      </a>
+      <div>
+        name: <a :href="token.url" target="_blank">{{ token.name }}</a>
+      </div>
+      <div>
+        seller:
+        <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
+      </div>
+      <div>price: {{ token.listings_active?.price_xtz }}</div>
+      <div>supply: {{ token.supply }}</div>
+      <div>amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// This code is used to fetch the token data from the objkt API
+// The Token interface represents the data structure of the token
+// The Collection interface represents the data structure of the collection
+// The CollectionResult interface represents the data structure of the result from the API
+
 interface Token {
   name: string;
   thumbnail_uri: string;
@@ -33,7 +48,10 @@ interface Token {
     amount: number;
     amount_left: number;
     price_xtz: number;
-    seller_address: string;
+    seller: {
+      address: string;
+      alias: string;
+    };
   }[];
 }
 
@@ -75,7 +93,10 @@ const collectionQuery = gql`
           amount
           amount_left
           price_xtz
-          seller_address
+          seller {
+            address
+            alias
+          }
         }
       }
     }
@@ -87,18 +108,7 @@ const limit = 20;
 
 const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { walletAddress, limit });
 
-const nfts = computed(() => data.value?.fa.flatMap((collection) => collection.tokens) || []);
-
-const transformedNfts = computed(() =>
-  nfts.value.map((nft) => {
-    return {
-      ...nft,
-      display_uri: nft.display_uri.replace("ipfs://", "https://ipfs.io/ipfs/"),
-      thumbnail_uri: nft.thumbnail_uri.replace("ipfs://", "https://ipfs.io/ipfs/"),
-    };
-  })
-);
-
+// transform the data to make it easier to use in the template
 const creator = computed(() => data.value?.fa[0]?.creator);
 
 const collection = computed(() => {
@@ -110,5 +120,30 @@ const collection = computed(() => {
   };
 });
 
-console.log(transformedNfts.value);
+const tokens = computed(() => data.value?.fa.flatMap((collection: Collection) => collection.tokens) || []);
+
+const transformedTokens = computed(() =>
+  tokens.value.map((token) => {
+    return {
+      ...token,
+      display_uri: token.display_uri.replace("ipfs://", "https://ecrantotal.twic.pics/"),
+      thumbnail_uri: token.thumbnail_uri.replace("ipfs://", "https://ecrantotal.twic.pics/"),
+      listings_active: token.listings_active
+        .map((listing) => {
+          return {
+            ...listing,
+            price_xtz: `${listing.price_xtz / 1000000}ꜩ`,
+          };
+        })
+        .pop(),
+      url: `https://objkt.com/asset/${walletAddress}/${token.token_id}`,
+    };
+  })
+);
 </script>
+
+<style scoped>
+.token {
+  margin-bottom: 2em;
+}
+</style>
