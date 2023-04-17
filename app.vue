@@ -1,3 +1,6 @@
 <template>
-  <div><NFTCollection /></div>
+  <div>
+    <Header />
+    <NFTCollection />
+  </div>
 </template>

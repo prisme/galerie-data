@@ -4,13 +4,8 @@ html {
 }
 
 body {
-  background-color: black;
-  color: white;
   font-family: Jost, sans-serif;
   min-height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   font-size: 1.5rem;
   letter-spacing: 0.06rem;
@@ -24,5 +19,5 @@ body {
 }
 
 a {
-  color: white;
+  color: black;
 }
