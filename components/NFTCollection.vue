@@ -30,7 +30,7 @@
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank">
-            <img :src="token?.thumbnail_uri || token?.display_uri" :alt="token.name" />
+            <img :src="(token?.thumbnail_uri || token?.display_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
           </a>
           <div>
             name: <a :href="token.url" target="_blank">{{ token.name }}</a>
@@ -131,10 +131,15 @@ const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { wallet
 
 // watch the input field for changes & update the data
 watch(refWallet, (value) => {
-  const { onResult } = useQuery(collectionQuery, { walletAddress: value, limit });
+  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit });
 
-  onResult((result) => {
-    data.value = result.data;
+  if (result.value !== undefined && !loading.value) {
+    data.value = result.value;
+    return;
+  }
+
+  onResult((res) => {
+    data.value = res.data;
   });
 });
 
@@ -161,8 +166,6 @@ const transformedTokens = computed(() =>
   tokens.value.map((token) => {
     return {
       ...token,
-      display_uri: token?.display_uri.replace("ipfs://", "https://ecrantotal.twic.pics/") || "",
-      thumbnail_uri: token?.thumbnail_uri !== null ? token?.thumbnail_uri.replace("ipfs://", "https://ecrantotal.twic.pics/") : "",
       listings_active: token?.listings_active
         .map((listing) => {
           return {
