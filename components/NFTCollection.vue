@@ -4,36 +4,38 @@
       <label for="wallet">collection wallet</label> <br />
       <input type="text" v-model.trim="refWallet" id="wallet" />
     </fieldset>
-    <h2>Collection</h2>
     <div>
+      <h2>Collection</h2>
       <a :href="`https://objkt.com/collection/${collection.contract}`">{{ collection?.name }}</a>
       <p>{{ collection.description }}</p>
     </div>
 
-    <h2>Creator</h2>
-    <div>
+    <div v-if="creator?.address">
+      <h2>Creator</h2>
       <a :href="`https://objkt.com/profile/${creator?.address}`">{{ creator?.alias }}</a>
       <p>{{ creator?.description }}</p>
     </div>
 
-    <h2>Tokens</h2>
-    <ul class="tokens">
-      <li v-for="token in transformedTokens" :key="token.token_id" class="token">
-        <a :href="token.url" target="_blank">
-          <img :src="token.thumbnail_uri" :alt="token.name" />
-        </a>
-        <div>
-          name: <a :href="token.url" target="_blank">{{ token.name }}</a>
-        </div>
-        <div>
-          seller:
-          <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
-        </div>
-        <div>price: {{ token.listings_active?.price_xtz }}</div>
-        <div>supply: {{ token.supply }}</div>
-        <div>amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
-      </li>
-    </ul>
+    <div v-if="transformedTokens.length">
+      <h2>Tokens</h2>
+      <ul class="tokens">
+        <li v-for="token in transformedTokens" :key="token.token_id" class="token">
+          <a :href="token.url" target="_blank">
+            <img :src="token.thumbnail_uri" :alt="token.name" />
+          </a>
+          <div>
+            name: <a :href="token.url" target="_blank">{{ token.name }}</a>
+          </div>
+          <div>
+            seller:
+            <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
+          </div>
+          <div>price: {{ token.listings_active?.price_xtz }}</div>
+          <div>supply: {{ token.supply }}</div>
+          <div>amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -162,17 +164,35 @@ const transformedTokens = computed(() =>
 <style scoped>
 .collection {
   margin: auto;
-  max-width: 800px;
+  width: 90vw;
+  max-width: 1920px;
 }
 
 .tokens {
   list-style: none;
   padding: 0;
   display: flex;
-  gap: 1em;
+  flex-wrap: wrap;
+  gap: 1%;
 }
 .token {
-  flex: 1 1 33%;
+  flex: 1 1 30%;
   margin-bottom: 2em;
+}
+
+@media screen and (max-width: 768px) {
+  .token {
+    flex: 1 1 49%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .token {
+    flex: 1 1 100%;
+  }
+}
+
+.token img {
+  display: block;
+  width: 100%;
 }
 </style>
