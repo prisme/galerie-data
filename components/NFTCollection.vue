@@ -3,6 +3,15 @@
     <fieldset style="margin-top: 2em">
       <label for="wallet">collection wallet</label> <br />
       <input type="text" v-model.trim="refWallet" id="wallet" />
+      <div class="examples">
+        <small
+          ><span>examples : </span>
+          <span v-for="(example, index) in examples"
+            ><a :href="`https://objkt.com/collection/${example.address}`" @click.prevent="updateWallet">{{ example.name }}</a
+            ><span v-if="index < examples.length - 1">&nbsp;|&nbsp;</span>
+          </span>
+        </small>
+      </div>
     </fieldset>
     <div>
       <h2>Collection</h2>
@@ -21,7 +30,7 @@
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank">
-            <img :src="token.thumbnail_uri" :alt="token.name" />
+            <img :src="token?.thumbnail_uri || token?.display_uri" :alt="token.name" />
           </a>
           <div>
             name: <a :href="token.url" target="_blank">{{ token.name }}</a>
@@ -47,9 +56,10 @@
 
 interface Token {
   name: string;
+  fa_contract: string;
+  token_id: string;
   thumbnail_uri: string;
   display_uri: string;
-  token_id: string;
   supply: string;
   timestamp: Date;
   listings_active: {
@@ -92,9 +102,10 @@ const collectionQuery = gql`
       }
       tokens(limit: $limit) {
         name
+        fa_contract
+        token_id
         thumbnail_uri
         display_uri
-        token_id
         supply
         timestamp
         listings_active {
@@ -127,6 +138,11 @@ watch(refWallet, (value) => {
   });
 });
 
+function updateWallet(event: Event) {
+  const target = event.target as HTMLAnchorElement;
+  refWallet.value = target.href.replace("https://objkt.com/collection/", "");
+}
+
 // transform the data to make it easier to use in the template
 const creator = computed(() => data.value?.fa[0]?.creator);
 
@@ -145,9 +161,9 @@ const transformedTokens = computed(() =>
   tokens.value.map((token) => {
     return {
       ...token,
-      display_uri: token.display_uri.replace("ipfs://", "https://ecrantotal.twic.pics/"),
-      thumbnail_uri: token.thumbnail_uri.replace("ipfs://", "https://ecrantotal.twic.pics/"),
-      listings_active: token.listings_active
+      display_uri: token?.display_uri.replace("ipfs://", "https://ecrantotal.twic.pics/") || "",
+      thumbnail_uri: token?.thumbnail_uri !== null ? token?.thumbnail_uri.replace("ipfs://", "https://ecrantotal.twic.pics/") : "",
+      listings_active: token?.listings_active
         .map((listing) => {
           return {
             ...listing,
@@ -155,10 +171,16 @@ const transformedTokens = computed(() =>
           };
         })
         .pop(),
-      url: `https://objkt.com/asset/${walletAddress}/${token.token_id}`,
+      url: `https://objkt.com/asset/${token.fa_contract}/${token.token_id}`,
     };
   })
 );
+
+const examples = [
+  { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
+  { name: "fx(hash)", address: "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi" },
+  { name: "Octet", address: "KT1FRjrFbRbAcJYuXiwJxmQC5sYpHgXbLQ4S" },
+];
 </script>
 
 <style scoped>
