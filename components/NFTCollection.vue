@@ -1,5 +1,9 @@
 <template>
   <div class="collection">
+    <fieldset style="margin-top: 2em">
+      <label for="wallet">collection wallet</label> <br />
+      <input type="text" v-model.trim="refWallet" id="wallet" />
+    </fieldset>
     <h2>Collection</h2>
     <div>
       <a :href="`https://objkt.com/collection/${collection.contract}`">{{ collection?.name }}</a>
@@ -108,7 +112,15 @@ const collectionQuery = gql`
 const walletAddress = "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE";
 const limit = 20;
 
+const refWallet = ref(walletAddress);
+
 const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { walletAddress, limit });
+
+// watch the input field for changes & update the data
+watch(refWallet, (value) => {
+  const { result } = useQuery(collectionQuery, { walletAddress: value, limit });
+  data.value = result.value;
+});
 
 // transform the data to make it easier to use in the template
 const creator = computed(() => data.value?.fa[0]?.creator);
