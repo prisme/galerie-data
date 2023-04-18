@@ -46,7 +46,7 @@
       </ul>
     </div>
 
-    <div class="load-more"><button v-if="showLoadMoreButton" @click="loadMore" class="load-more__button">Load More</button></div>
+    <div class="load-more"><button v-if="isLoadMoreDisplayed" @click="loadMore" class="load-more__button">Load More</button></div>
   </div>
 </template>
 
@@ -128,34 +128,34 @@ const walletAddress = ref("KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE");
 const limit = ref(20);
 const offset = ref(0);
 
-const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { walletAddress: walletAddress.value, limit: limit.value, offset: offset.value });
+const queryVariables = { walletAddress: walletAddress.value, limit: limit.value, offset: offset.value };
+const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, queryVariables);
 
 const tokens = ref<Token[]>(data.value?.fa[0]?.tokens || []);
 
-// watch the input field for changes & update the data
-watch(walletAddress, (value) => {
-  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit: limit.value });
+const creator = ref<Collection["creator"] | null>(data.value?.fa[0]?.creator || null);
 
-  if (result.value !== undefined && !loading.value) {
-    tokens.value = result.value.fa[0].tokens;
-    return;
-  }
-
-  onResult((res) => {
-    tokens.value = res.data.fa[0].tokens;
-  });
+const collection = ref<Pick<Collection, "contract" | "name" | "description">>({
+  contract: data.value?.fa[0]?.contract || "",
+  name: data.value?.fa[0]?.name || "",
+  description: data.value?.fa[0]?.description || "",
 });
 
-function updateWallet(event: Event) {
-  const target = event.target as HTMLAnchorElement;
-  walletAddress.value = target.href.replace("https://objkt.com/collection/", "");
+function updateData(res: CollectionResult) {
+  tokens.value = res.fa[0].tokens;
+  creator.value = res.fa[0].creator;
+  collection.value = {
+    contract: res.fa[0].contract,
+    name: res.fa[0].name,
+    description: res.fa[0].description,
+  };
 }
 
 async function loadMore() {
   offset.value += limit.value;
   const { result, loading, onResult } = useQuery(collectionQuery, {
     walletAddress: walletAddress.value,
-    limit,
+    limit: limit.value,
     offset: offset.value,
   });
 
@@ -169,18 +169,33 @@ async function loadMore() {
   });
 }
 
-// transform the data to make it easier to use in the template
-const creator = computed(() => data.value?.fa[0]?.creator);
+// watch the input field for changes & update the data
+watch(walletAddress, (value) => {
+  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit: limit.value });
 
-const collection = computed(() => {
-  const { contract, name, description } = data.value?.fa[0] || {};
-  return {
-    name,
-    description,
-    contract,
-  };
+  if (result.value !== undefined && !loading.value) {
+    updateData(result.value);
+    return;
+  }
+
+  onResult((res) => {
+    updateData(res.data);
+  });
 });
 
+function updateWallet(event: Event) {
+  const target = event.target as HTMLAnchorElement;
+  walletAddress.value = target.href.replace("https://objkt.com/collection/", "");
+}
+
+const isLoadMoreDisplayed = computed(() => {
+  if (!tokens.value || tokens.value.length === 0) {
+    return false;
+  }
+  return tokens.value.length > offset.value + limit.value - 1;
+});
+
+// data transformer
 const transformedTokens = computed(() =>
   tokens.value.map((token) => {
     return {
@@ -197,13 +212,6 @@ const transformedTokens = computed(() =>
     };
   })
 );
-
-const showLoadMoreButton = computed(() => {
-  if (!tokens.value || tokens.value.length === 0) {
-    return false;
-  }
-  return tokens.value.length > offset.value + limit.value - 1;
-});
 
 const examples = [
   { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
