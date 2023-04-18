@@ -2,7 +2,7 @@
   <div class="collection">
     <fieldset style="margin-top: 2em">
       <label for="wallet">collection wallet</label> <br />
-      <input type="text" v-model.trim="refWallet" id="wallet" />
+      <input type="text" v-model.trim="walletAddress" id="wallet" />
       <div class="examples">
         <small
           ><span>examples : </span>
@@ -45,6 +45,8 @@
         </li>
       </ul>
     </div>
+
+    <div class="load-more"><button v-if="showLoadMoreButton" @click="loadMore" class="load-more__button">Load More</button></div>
   </div>
 </template>
 
@@ -90,7 +92,7 @@ interface CollectionResult {
 }
 
 const collectionQuery = gql`
-  query objkts($walletAddress: String!, $limit: Int = 100) {
+  query objkts($walletAddress: String!, $limit: Int = 100, $offset: Int = 0) {
     fa(where: { contract: { _eq: $walletAddress } }) {
       contract
       name
@@ -100,7 +102,7 @@ const collectionQuery = gql`
         address
         description
       }
-      tokens(limit: $limit) {
+      tokens(limit: $limit, offset: $offset) {
         name
         fa_contract
         token_id
@@ -122,30 +124,49 @@ const collectionQuery = gql`
   }
 `;
 
-const walletAddress = "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE";
-const limit = 20;
+const walletAddress = ref("KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE");
+const limit = ref(20);
+const offset = ref(0);
 
-const refWallet = ref(walletAddress);
+const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { walletAddress: walletAddress.value, limit: limit.value, offset: offset.value });
 
-const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, { walletAddress, limit });
+const tokens = ref<Token[]>(data.value?.fa[0]?.tokens || []);
 
 // watch the input field for changes & update the data
-watch(refWallet, (value) => {
-  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit });
+watch(walletAddress, (value) => {
+  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit: limit.value });
 
   if (result.value !== undefined && !loading.value) {
-    data.value = result.value;
+    tokens.value = result.value.fa[0].tokens;
     return;
   }
 
   onResult((res) => {
-    data.value = res.data;
+    tokens.value = res.data.fa[0].tokens;
   });
 });
 
 function updateWallet(event: Event) {
   const target = event.target as HTMLAnchorElement;
-  refWallet.value = target.href.replace("https://objkt.com/collection/", "");
+  walletAddress.value = target.href.replace("https://objkt.com/collection/", "");
+}
+
+async function loadMore() {
+  offset.value += limit.value;
+  const { result, loading, onResult } = useQuery(collectionQuery, {
+    walletAddress: walletAddress.value,
+    limit,
+    offset: offset.value,
+  });
+
+  if (result.value !== undefined && !loading.value) {
+    tokens.value = [...tokens.value, ...result.value.fa[0].tokens];
+    return;
+  }
+
+  onResult((res) => {
+    tokens.value = [...tokens.value, ...res.data.fa[0].tokens];
+  });
 }
 
 // transform the data to make it easier to use in the template
@@ -159,8 +180,6 @@ const collection = computed(() => {
     contract,
   };
 });
-
-const tokens = computed(() => data.value?.fa.flatMap((collection: Collection) => collection.tokens) || []);
 
 const transformedTokens = computed(() =>
   tokens.value.map((token) => {
@@ -178,6 +197,13 @@ const transformedTokens = computed(() =>
     };
   })
 );
+
+const showLoadMoreButton = computed(() => {
+  if (!tokens.value || tokens.value.length === 0) {
+    return false;
+  }
+  return tokens.value.length > offset.value + limit.value - 1;
+});
 
 const examples = [
   { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
@@ -220,5 +246,11 @@ const examples = [
 .token img {
   display: block;
   width: 100%;
+}
+
+.load-more {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
 }
 </style>
