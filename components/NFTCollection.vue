@@ -183,6 +183,7 @@ const examples = [
   { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
   { name: "fx(hash)", address: "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi" },
   { name: "Octet", address: "KT1FRjrFbRbAcJYuXiwJxmQC5sYpHgXbLQ4S" },
+  { name: "V33", address: "KT1EYjpUzyW1WnZZREbJaaijaSiUK77psefh" },
 ];
 </script>
 
