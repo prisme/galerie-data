@@ -9,7 +9,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "^3.3.2"
+    "@nuxt/content": "^2.6.0",
+    "nuxt": "^3.3.2",
+    "unenv": "^1.4.1"
   },
   "dependencies": {
     "@nuxtjs/apollo": "5.0.0-alpha.6",
