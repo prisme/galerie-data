@@ -124,7 +124,7 @@ const collectionQuery = gql`
   }
 `;
 
-const walletAddress = ref("KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE");
+const walletAddress = ref("KT18jEB9uJTqVtChNnhhPSkaucieFnVACPKV");
 const limit = ref(20);
 const offset = ref(0);
 
