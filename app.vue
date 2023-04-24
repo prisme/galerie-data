@@ -1,10 +1,13 @@
 <script setup>
-const { data } = await useAsyncData("index", () => queryContent("/").findOne());
+const { data: page } = await useAsyncData("index", () => queryContent("/").findOne());
+
+useContentHead(page);
 </script>
 
 <template>
   <div>
-    <pre>{{ data.title }}</pre>
+    <!-- <pre>{{ page }}</pre> -->
+    <ContentRenderer :value="page" />
     <Header />
     <NFTCollection />
   </div>
