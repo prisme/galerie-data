@@ -6,9 +6,8 @@ useContentHead(page);
 
 <template>
   <div>
-    <!-- <pre>{{ page }}</pre> -->
-    <ContentRenderer :value="page" />
     <Header />
+    <ContentRenderer :value="page" />
     <NFTCollection />
   </div>
 </template>
