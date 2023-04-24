@@ -102,7 +102,7 @@ const collectionQuery = gql`
         address
         description
       }
-      tokens(limit: $limit, offset: $offset) {
+      tokens(limit: $limit, offset: $offset, where: { supply: { _gte: "1" } }) {
         name
         fa_contract
         token_id
