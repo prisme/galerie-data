@@ -12,11 +12,11 @@ dependencies:
   '@nuxtjs/apollo': 5.0.0-alpha.6_dtjfskxukdxv24psui2m5c75zy
   '@nuxtjs/google-fonts': 3.0.0
   normalize.css: 8.0.1
+  unenv: 1.4.1
 
 devDependencies:
   '@nuxt/content': 2.6.0
   nuxt: 3.3.2_typescript@5.0.4
-  unenv: 1.4.1
 
 packages:
 
@@ -3679,7 +3679,6 @@ packages:
     resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
     engines: {node: '>=10.0.0'}
     hasBin: true
-    dev: true
 
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -5300,7 +5299,6 @@ packages:
       mime: 3.0.0
       node-fetch-native: 1.1.0
       pathe: 1.1.0
-    dev: true
 
   /unhead/1.1.25:
     resolution: {integrity: sha512-KtTBgtQjxICoOjA4dyxJfj5fYoYJeYFUt/J8ulaTzbvTsXM9K+ztYjI65nf2CPYYXRCRz/iEt8trqcsGlsB5TQ==}
