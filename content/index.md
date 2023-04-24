@@ -2,9 +2,9 @@
 title: "Galerie Data NFT"
 description: "@TODO page description"
 image:
-  src: "/assets/image.jpg"
-  width: 400
-  height: 300
+  src: "/img/banner.jpg"
+  width: 1800
+  height: 600
 head:
   meta:
     - name: "keywords"
@@ -12,5 +12,5 @@ head:
     - name: "author"
       content: "Galerie Data"
 ---
+![alt text](/img/banner.jpg){.banner-img}
 
-![](https://cdn.shopify.com/s/files/1/0660/8165/3002/files/GALERIE_DATA_LOGO_WHITE.png?v=1674927996&width=500) image
