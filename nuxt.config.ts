@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts"],
+  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts", "@nuxt/content"],
 
   css: ["normalize.css/normalize.css", "@/css/main.css"],
 
