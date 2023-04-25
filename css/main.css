@@ -10,6 +10,8 @@ body {
   font-size: 1.5rem;
   letter-spacing: 0.06rem;
   line-height: 1.8;
+  min-width: 375px;
+  overflow-x: hidden;
 }
 
 @media screen and (min-width: 750px) {

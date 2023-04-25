@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts", "@nuxtjs/prismic"],
 
-  css: ["normalize.css/normalize.css", "@/css/variables.css", "@/css/main.css", "@/css/base.css"],
+  css: ["normalize.css/normalize.css", "@/css/variables.css", "@/css/main.css", "@/css/base.css", "@/css/nav.css", "@/css/component-menu-drawer.css"],
 
   apollo: {
     clients: {

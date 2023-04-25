@@ -16,13 +16,17 @@ defineProps({
 </script>
 
 <template>
-  <header class="header">
-    <PrismicImage :field="logo" class="logo" />
+  <header class="header header--top-center header--mobile-center header--has-menu">
+    <h1 class="header__heading">
+      <a :href="baseUrl" class="header__heading-link link link--text focus-inset">
+        <PrismicImage :field="logo" class="header__heading-logo" />
+      </a>
+    </h1>
 
-    <nav v-if="navigation.length" class="nav">
-      <ul>
+    <nav v-if="navigation.length" class="header__inline-menu">
+      <ul class="list-menu list-menu--inline" role="list">
         <li v-for="item in navigation">
-          <PrismicLink :field="item.link" :class="{ active: item.active === true }">
+          <PrismicLink :field="item.link" :class="{ 'header__active-menu-item': item.active === true }" class="header__menu-item list-menu__item link link--text focus-inset">
             <PrismicRichText :field="item.name" />
           </PrismicLink>
         </li>
@@ -33,12 +37,13 @@ defineProps({
 
 <style scoped>
 .header {
-  display: flex;
+  --color-foreground: #fff;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   background-color: #000;
-  color: #fff;
+  /* color: #fff; */
   padding-top: 20px;
   padding-bottom: 20px;
 }
