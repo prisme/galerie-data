@@ -203,7 +203,7 @@ const transformedTokens = computed(() =>
 .collection {
   margin: auto;
   width: 90vw;
-  max-width: 1920px;
+  max-width: 1280px;
 }
 
 .collection__label {
