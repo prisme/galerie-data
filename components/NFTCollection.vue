@@ -12,26 +12,25 @@
     </div>
 
     <PrismicImage :field="collectionImage" class="banner" />
-
     <PrismicRichText :field="collectionDescription" />
 
     <div v-if="transformedTokens.length">
       <h2>NFT Limited Editions</h2>
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
-          <a :href="token.url" target="_blank">
+          <a :href="token.url" target="_blank" class="token__preview">
             <img :src="(token?.thumbnail_uri || token?.display_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
           </a>
-          <div>
+          <div class="token__info">
             <a :href="token.url" target="_blank">{{ token.name }}</a>
+            <div v-if="token.supply">supply: {{ token.supply }}</div>
+            <div v-if="token.listings_active?.seller.address">
+              seller:
+              <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
+            </div>
+            <div v-if="token.listings_active?.price_xtz">price: {{ token.listings_active?.price_xtz }}</div>
+            <div v-if="token.listings_active?.amount && token.listings_active?.amount_left">amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
           </div>
-          <div v-if="token.listings_active?.seller.address">
-            seller:
-            <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
-          </div>
-          <div v-if="token.listings_active?.price_xtz">price: {{ token.listings_active?.price_xtz }}</div>
-          <div>supply: {{ token.supply }}</div>
-          <div v-if="token.listings_active?.amount && token.listings_active?.amount_left">amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
         </li>
       </ul>
     </div>
@@ -235,6 +234,26 @@ const transformedTokens = computed(() =>
 .token img {
   display: block;
   width: 100%;
+}
+
+.token__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  height: auto;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.token__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .load-more {
