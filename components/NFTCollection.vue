@@ -111,11 +111,15 @@ const collectionQuery = gql`
   }
 `;
 
-const walletAddress = ref("KT18jEB9uJTqVtChNnhhPSkaucieFnVACPKV");
+const props = defineProps<{
+  walletAddress: String;
+}>();
+
+const { walletAddress } = props;
 const limit = ref(20);
 const offset = ref(0);
 
-const queryVariables = { walletAddress: walletAddress.value, limit: limit.value, offset: offset.value };
+const queryVariables = { walletAddress: walletAddress, limit: limit.value, offset: offset.value };
 const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, queryVariables);
 
 const tokens = ref<Token[]>(data.value?.fa[0]?.tokens || []);
@@ -141,7 +145,7 @@ function updateData(res: CollectionResult) {
 async function loadMore() {
   offset.value += limit.value;
   const { result, loading, onResult } = useQuery(collectionQuery, {
-    walletAddress: walletAddress.value,
+    walletAddress: walletAddress,
     limit: limit.value,
     offset: offset.value,
   });

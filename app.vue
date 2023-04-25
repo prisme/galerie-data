@@ -37,11 +37,13 @@ useHead({
     },
   ],
 });
+
+const collectionAddress = "KT18jEB9uJTqVtChNnhhPSkaucieFnVACPKV";
 </script>
 
 <template>
   <div>
     <Header :logo="headerLogo" :navigation="headerNavigation" :name="headerName" />
-    <NFTCollection />
+    <NFTCollection :wallet-address="collectionAddress" />
   </div>
 </template>
