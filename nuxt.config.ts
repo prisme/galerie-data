@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts"],
+  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts", "@nuxtjs/prismic"],
 
-  css: ["normalize.css/normalize.css", "@/css/main.css"],
+  css: ["normalize.css/normalize.css", "@/css/variables.css", "@/css/main.css", "@/css/base.css", "@/css/nav.css", "@/css/section-footer.css"],
 
   apollo: {
     clients: {
@@ -14,7 +14,9 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      Jost: [300, 600],
+      Jost: [300, 400, 500, 600],
     },
   },
+
+  prismic: { endpoint: "galeriedata" },
 });

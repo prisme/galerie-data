@@ -1,29 +1,25 @@
-:root {
-  --font-body-scale: 1;
-  --font-heading-scale: 1;
-}
-
 html {
-  font-size: calc(var(--font-body-scale) * 62.5%);
+  font-size: 62.5%;
   height: 100%;
 }
 
 body {
-  background-color: black;
-  color: white;
   font-family: Jost, sans-serif;
-  height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100dvh;
 
   font-size: 1.5rem;
   letter-spacing: 0.06rem;
-  line-height: calc(1 + 0.8 / var(--font-body-scale));
+  line-height: 1.8;
+  min-width: 375px;
+  overflow-x: hidden;
 }
 
 @media screen and (min-width: 750px) {
   body {
     font-size: 1.6rem;
   }
+}
+
+a {
+  color: black;
 }
