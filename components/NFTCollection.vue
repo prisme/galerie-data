@@ -23,13 +23,17 @@
           </a>
           <div class="token__info">
             <a :href="token.url" target="_blank">{{ token.name }}</a>
-            <div v-if="token.supply">supply: {{ token.supply }}</div>
+            <div v-if="token.supply">{{ token.supply }} editions</div>
             <div v-if="token.listings_active?.seller.address">
               seller:
               <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
             </div>
             <div v-if="token.listings_active?.price_xtz">price: {{ token.listings_active?.price_xtz }}</div>
             <div v-if="token.listings_active?.amount && token.listings_active?.amount_left">amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
+          </div>
+
+          <div class="token__cta">
+            <a :href="token.url" target="_blank" class="button cta"> BUY ON OBJKT </a>
           </div>
         </li>
       </ul>
@@ -245,15 +249,19 @@ const transformedTokens = computed(() =>
   aspect-ratio: 1/1;
   height: auto;
 
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.04);
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  /* border-radius: 4px; */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
 }
 
 .token__preview img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.token__info {
+  padding: 1em 0;
 }
 
 .load-more {
@@ -265,5 +273,18 @@ const transformedTokens = computed(() =>
 .banner {
   display: block;
   width: 100%;
+}
+
+.token__cta {
+  margin: 1em 0;
+  display: flex;
+  /* justify-content: center; */
+}
+
+.cta {
+  font-size: 0.8em;
+  padding: 0 0.8rem;
+  background: transparent;
+  color: black;
 }
 </style>
