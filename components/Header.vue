@@ -22,7 +22,7 @@ defineProps({
     <nav v-if="navigation.length" class="nav">
       <ul>
         <li v-for="item in navigation">
-          <PrismicLink :field="item.link">
+          <PrismicLink :field="item.link" :class="{ active: item.active === true }">
             <PrismicRichText :field="item.name" />
           </PrismicLink>
         </li>
@@ -34,6 +34,7 @@ defineProps({
 <style scoped>
 .header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #000;
@@ -52,5 +53,14 @@ defineProps({
 }
 .nav a {
   color: #fff;
+}
+.nav a.active {
+  text-decoration: none;
+}
+
+.nav ul {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
 }
 </style>
