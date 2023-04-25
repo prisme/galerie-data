@@ -1,18 +1,5 @@
 <template>
   <div class="collection">
-    <fieldset style="margin-top: 2em">
-      <label for="wallet">collection wallet</label> <br />
-      <input type="text" v-model.trim="walletAddress" id="wallet" />
-      <div class="examples">
-        <small
-          ><span>examples : </span>
-          <span v-for="(example, index) in examples"
-            ><a :href="`https://objkt.com/collection/${example.address}`" @click.prevent="updateWallet">{{ example.name }}</a
-            ><span v-if="index < examples.length - 1">&nbsp;|&nbsp;</span>
-          </span>
-        </small>
-      </div>
-    </fieldset>
     <div>
       <h2>Collection</h2>
       <a :href="`https://objkt.com/collection/${collection.contract}`">{{ collection?.name }}</a>
@@ -169,25 +156,6 @@ async function loadMore() {
   });
 }
 
-// watch the input field for changes & update the data
-watch(walletAddress, (value) => {
-  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit: limit.value });
-
-  if (result.value !== undefined && !loading.value) {
-    updateData(result.value);
-    return;
-  }
-
-  onResult((res) => {
-    updateData(res.data);
-  });
-});
-
-function updateWallet(event: Event) {
-  const target = event.target as HTMLAnchorElement;
-  walletAddress.value = target.href.replace("https://objkt.com/collection/", "");
-}
-
 const isLoadMoreDisplayed = computed(() => {
   if (!tokens.value || tokens.value.length === 0) {
     return false;
@@ -212,13 +180,6 @@ const transformedTokens = computed(() =>
     };
   })
 );
-
-const examples = [
-  { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
-  { name: "fx(hash)", address: "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi" },
-  { name: "Octet", address: "KT1FRjrFbRbAcJYuXiwJxmQC5sYpHgXbLQ4S" },
-  { name: "V33", address: "KT1EYjpUzyW1WnZZREbJaaijaSiUK77psefh" },
-];
 </script>
 
 <style scoped>
