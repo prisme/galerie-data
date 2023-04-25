@@ -308,20 +308,21 @@ const transformedTokens = computed(() =>
   font-size: 24px;
   line-height: 35px;
   text-transform: uppercase;
-  margin: 42px 0;
+  margin: 5rem 0 4rem;
 }
 
 @media screen and (max-width: 768px) {
   .tokens__title {
     font-size: 20px;
     line-height: 29px;
-    margin: 20px 0;
+    margin: 4rem 0 3rem;
   }
 }
 @media screen and (max-width: 480px) {
   .tokens__title {
     font-size: 16px;
     line-height: 23px;
+    margin: 3rem 0 2rem;
   }
 }
 
