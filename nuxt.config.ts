@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      Jost: [300, 600],
+      Jost: [300, 400, 500, 600],
     },
   },
 

@@ -1,21 +1,15 @@
 <template>
   <div class="collection">
-    <div>
-      <h2>Collection</h2>
-      <a :href="`https://objkt.com/collection/${collection.contract}`">{{ collection?.name }}</a>
-      <p>{{ collection.description }}</p>
-    </div>
+    <h2 class="collection__label">Collection</h2>
+    <!-- <a :href="`https://objkt.com/collection/${collection.contract}`" class="collection__title">{{ collection?.name }}</a> -->
+    <h1 class="collection__title">{{ collection?.name }}</h1>
+    <p class="collection__objkt-description">{{ collection.description }}</p>
 
-    <div v-if="creator?.address">
-      <a :href="`https://objkt.com/profile/${creator?.address}`">{{ creator?.alias }}</a>
-      <p>{{ creator?.description }}</p>
-    </div>
-
-    <PrismicImage :field="collectionImage" class="banner" />
-    <PrismicRichText :field="collectionDescription" />
+    <PrismicRichText :field="collectionDescription" class="collection__description" />
+    <PrismicImage :field="collectionImage" class="collection__banner" />
 
     <div v-if="transformedTokens.length">
-      <h2>NFT Limited Editions</h2>
+      <h2 class="tokens__title">NFT Limited Editions</h2>
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank" class="token__preview">
@@ -33,7 +27,7 @@
           </div>
 
           <div class="token__cta">
-            <a :href="token.url" target="_blank" class="button cta"> BUY ON OBJKT </a>
+            <a :href="token.url" target="_blank" class="cta"> BUY ON OBJKT </a>
           </div>
         </li>
       </ul>
@@ -212,6 +206,94 @@ const transformedTokens = computed(() =>
   max-width: 1920px;
 }
 
+.collection__label {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 35px;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 42px 0 0 0;
+}
+
+@media screen and (max-width: 768px) {
+  .collection__label {
+    font-size: 20px;
+    line-height: 29px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .collection__label {
+    font-size: 16px;
+    line-height: 23px;
+  }
+}
+
+.collection__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 69px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+  .collection__title {
+    font-size: 40px;
+    line-height: 58px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .collection__title {
+    font-size: 32px;
+    line-height: 46px;
+  }
+}
+
+.collection__objkt-description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 23px;
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .collection__objkt-description {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .collection__objkt-description {
+    font-size: 12px;
+    line-height: 17px;
+  }
+}
+.collection__description {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 23px;
+  margin: 2em 0;
+}
+
+@media screen and (max-width: 768px) {
+  .collection__description {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .collection__description {
+    font-size: 12px;
+    line-height: 17px;
+  }
+}
+
+.collection__banner {
+  display: block;
+  width: 100%;
+}
+
 .tokens {
   list-style: none;
   padding: 0;
@@ -219,6 +301,29 @@ const transformedTokens = computed(() =>
   flex-wrap: wrap;
   gap: 1%;
 }
+
+.tokens__title {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 35px;
+  text-transform: uppercase;
+  margin: 42px 0;
+}
+
+@media screen and (max-width: 768px) {
+  .tokens__title {
+    font-size: 20px;
+    line-height: 29px;
+    margin: 20px 0;
+  }
+}
+@media screen and (max-width: 480px) {
+  .tokens__title {
+    font-size: 16px;
+    line-height: 23px;
+  }
+}
+
 .token {
   flex: 1 1 30%;
   margin-bottom: 2em;
@@ -249,9 +354,10 @@ const transformedTokens = computed(() =>
   aspect-ratio: 1/1;
   height: auto;
 
-  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  border: 1px solid rgba(0, 0, 0, 0.02);
   /* border-radius: 4px; */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04); */
+  box-shadow: -1px -1px 10px rgba(0, 0, 0, 0.04);
 }
 
 .token__preview img {
@@ -270,11 +376,6 @@ const transformedTokens = computed(() =>
   padding: 30px;
 }
 
-.banner {
-  display: block;
-  width: 100%;
-}
-
 .token__cta {
   margin: 1em 0;
   display: flex;
@@ -283,8 +384,15 @@ const transformedTokens = computed(() =>
 
 .cta {
   font-size: 0.8em;
-  padding: 0 0.8rem;
-  background: transparent;
-  color: black;
+  color: white;
+  background: black;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 10px;
+  text-decoration: none;
+  padding: 0.3em 1.3em;
 }
 </style>
