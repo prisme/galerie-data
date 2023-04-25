@@ -11,6 +11,10 @@
       <p>{{ creator?.description }}</p>
     </div>
 
+    <PrismicImage :field="collectionImage" class="banner" />
+
+    <PrismicRichText :field="collectionDescription" />
+
     <div v-if="transformedTokens.length">
       <h2>NFT Limited Editions</h2>
       <ul class="tokens">
@@ -41,6 +45,8 @@
 // The Token interface represents the data structure of the token
 // The Collection interface represents the data structure of the collection
 // The CollectionResult interface represents the data structure of the result from the API
+
+import { RichTextField } from "@prismicio/types";
 
 interface Token {
   name: string;
@@ -110,11 +116,32 @@ const collectionQuery = gql`
   }
 `;
 
+interface CollectionImage {
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  alt: string | null;
+  copyright: string | null;
+  url: string;
+  small: {
+    dimensions: {
+      width: number;
+      height: number;
+    };
+    alt: string | null;
+    copyright: string | null;
+    url: string;
+  };
+}
+
 const props = defineProps<{
-  walletAddress: String;
+  walletAddress: string;
+  collectionImage: CollectionImage;
+  collectionDescription: RichTextField;
 }>();
 
-const { walletAddress } = props;
+const { walletAddress, collectionImage, collectionDescription } = props;
 const limit = ref(20);
 const offset = ref(0);
 
@@ -130,16 +157,6 @@ const collection = ref<Pick<Collection, "contract" | "name" | "description">>({
   name: data.value?.fa[0]?.name || "",
   description: data.value?.fa[0]?.description || "",
 });
-
-function updateData(res: CollectionResult) {
-  tokens.value = res.fa[0].tokens;
-  creator.value = res.fa[0].creator;
-  collection.value = {
-    contract: res.fa[0].contract,
-    name: res.fa[0].name,
-    description: res.fa[0].description,
-  };
-}
 
 async function loadMore() {
   offset.value += limit.value;
@@ -224,5 +241,10 @@ const transformedTokens = computed(() =>
   display: flex;
   justify-content: center;
   padding: 30px;
+}
+
+.banner {
+  display: block;
+  width: 100%;
 }
 </style>
