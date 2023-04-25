@@ -139,7 +139,7 @@ const props = defineProps<{
 }>();
 
 const { walletAddress, collectionImage, collectionDescription } = props;
-const limit = ref(6);
+const limit = ref(20);
 const offset = ref(0);
 
 const queryVariables = { walletAddress: walletAddress, limit: limit.value, offset: offset.value };
