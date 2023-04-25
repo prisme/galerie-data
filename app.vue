@@ -37,11 +37,13 @@ useHead({
     },
   ],
 });
+
+const collection = index.value.body.find((item) => item.slice_type === "collection").primary;
 </script>
 
 <template>
   <div>
     <Header :logo="headerLogo" :navigation="headerNavigation" :name="headerName" />
-    <NFTCollection />
+    <NFTCollection :wallet-address="collection.address" :collection-image="collection.cover" :collection-description="collection.description" />
   </div>
 </template>

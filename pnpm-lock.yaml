@@ -4,6 +4,7 @@ specifiers:
   '@nuxtjs/apollo': 5.0.0-alpha.6
   '@nuxtjs/google-fonts': 3.0.0
   '@nuxtjs/prismic': 3.0.0-rc.4
+  '@prismicio/types': ^0.2.7
   normalize.css: ^8.0.1
   nuxt: ^3.3.2
 
@@ -14,6 +15,7 @@ dependencies:
 
 devDependencies:
   '@nuxtjs/prismic': 3.0.0-rc.4_vue@3.2.47
+  '@prismicio/types': 0.2.7
   nuxt: 3.3.2_typescript@5.0.4
 
 packages:

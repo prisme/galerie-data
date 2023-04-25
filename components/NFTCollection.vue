@@ -1,18 +1,5 @@
 <template>
   <div class="collection">
-    <fieldset style="margin-top: 2em">
-      <label for="wallet">collection wallet</label> <br />
-      <input type="text" v-model.trim="walletAddress" id="wallet" />
-      <div class="examples">
-        <small
-          ><span>examples : </span>
-          <span v-for="(example, index) in examples"
-            ><a :href="`https://objkt.com/collection/${example.address}`" @click.prevent="updateWallet">{{ example.name }}</a
-            ><span v-if="index < examples.length - 1">&nbsp;|&nbsp;</span>
-          </span>
-        </small>
-      </div>
-    </fieldset>
     <div>
       <h2>Collection</h2>
       <a :href="`https://objkt.com/collection/${collection.contract}`">{{ collection?.name }}</a>
@@ -20,28 +7,30 @@
     </div>
 
     <div v-if="creator?.address">
-      <h2>Creator</h2>
       <a :href="`https://objkt.com/profile/${creator?.address}`">{{ creator?.alias }}</a>
       <p>{{ creator?.description }}</p>
     </div>
 
+    <PrismicImage :field="collectionImage" class="banner" />
+    <PrismicRichText :field="collectionDescription" />
+
     <div v-if="transformedTokens.length">
-      <h2>Tokens</h2>
+      <h2>NFT Limited Editions</h2>
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
-          <a :href="token.url" target="_blank">
+          <a :href="token.url" target="_blank" class="token__preview">
             <img :src="(token?.thumbnail_uri || token?.display_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
           </a>
-          <div>
-            name: <a :href="token.url" target="_blank">{{ token.name }}</a>
+          <div class="token__info">
+            <a :href="token.url" target="_blank">{{ token.name }}</a>
+            <div v-if="token.supply">supply: {{ token.supply }}</div>
+            <div v-if="token.listings_active?.seller.address">
+              seller:
+              <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
+            </div>
+            <div v-if="token.listings_active?.price_xtz">price: {{ token.listings_active?.price_xtz }}</div>
+            <div v-if="token.listings_active?.amount && token.listings_active?.amount_left">amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
           </div>
-          <div>
-            seller:
-            <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
-          </div>
-          <div>price: {{ token.listings_active?.price_xtz }}</div>
-          <div>supply: {{ token.supply }}</div>
-          <div>amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
         </li>
       </ul>
     </div>
@@ -55,6 +44,8 @@
 // The Token interface represents the data structure of the token
 // The Collection interface represents the data structure of the collection
 // The CollectionResult interface represents the data structure of the result from the API
+
+import { RichTextField } from "@prismicio/types";
 
 interface Token {
   name: string;
@@ -124,11 +115,36 @@ const collectionQuery = gql`
   }
 `;
 
-const walletAddress = ref("KT18jEB9uJTqVtChNnhhPSkaucieFnVACPKV");
+interface CollectionImage {
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  alt: string | null;
+  copyright: string | null;
+  url: string;
+  small: {
+    dimensions: {
+      width: number;
+      height: number;
+    };
+    alt: string | null;
+    copyright: string | null;
+    url: string;
+  };
+}
+
+const props = defineProps<{
+  walletAddress: string;
+  collectionImage: CollectionImage;
+  collectionDescription: RichTextField;
+}>();
+
+const { walletAddress, collectionImage, collectionDescription } = props;
 const limit = ref(20);
 const offset = ref(0);
 
-const queryVariables = { walletAddress: walletAddress.value, limit: limit.value, offset: offset.value };
+const queryVariables = { walletAddress: walletAddress, limit: limit.value, offset: offset.value };
 const { data } = await useAsyncQuery<CollectionResult>(collectionQuery, queryVariables);
 
 const tokens = ref<Token[]>(data.value?.fa[0]?.tokens || []);
@@ -141,20 +157,10 @@ const collection = ref<Pick<Collection, "contract" | "name" | "description">>({
   description: data.value?.fa[0]?.description || "",
 });
 
-function updateData(res: CollectionResult) {
-  tokens.value = res.fa[0].tokens;
-  creator.value = res.fa[0].creator;
-  collection.value = {
-    contract: res.fa[0].contract,
-    name: res.fa[0].name,
-    description: res.fa[0].description,
-  };
-}
-
 async function loadMore() {
   offset.value += limit.value;
   const { result, loading, onResult } = useQuery(collectionQuery, {
-    walletAddress: walletAddress.value,
+    walletAddress: walletAddress,
     limit: limit.value,
     offset: offset.value,
   });
@@ -167,25 +173,6 @@ async function loadMore() {
   onResult((res) => {
     tokens.value = [...tokens.value, ...res.data.fa[0].tokens];
   });
-}
-
-// watch the input field for changes & update the data
-watch(walletAddress, (value) => {
-  const { result, loading, onResult } = useQuery(collectionQuery, { walletAddress: value, limit: limit.value });
-
-  if (result.value !== undefined && !loading.value) {
-    updateData(result.value);
-    return;
-  }
-
-  onResult((res) => {
-    updateData(res.data);
-  });
-});
-
-function updateWallet(event: Event) {
-  const target = event.target as HTMLAnchorElement;
-  walletAddress.value = target.href.replace("https://objkt.com/collection/", "");
 }
 
 const isLoadMoreDisplayed = computed(() => {
@@ -212,13 +199,6 @@ const transformedTokens = computed(() =>
     };
   })
 );
-
-const examples = [
-  { name: "BlakGrayInk", address: "KT1VeyVNYbtYJSd6NVa8mUFmKode5UXn8yuE" },
-  { name: "fx(hash)", address: "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi" },
-  { name: "Octet", address: "KT1FRjrFbRbAcJYuXiwJxmQC5sYpHgXbLQ4S" },
-  { name: "V33", address: "KT1EYjpUzyW1WnZZREbJaaijaSiUK77psefh" },
-];
 </script>
 
 <style scoped>
@@ -256,9 +236,34 @@ const examples = [
   width: 100%;
 }
 
+.token__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  height: auto;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.token__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .load-more {
   display: flex;
   justify-content: center;
   padding: 30px;
+}
+
+.banner {
+  display: block;
+  width: 100%;
 }
 </style>
