@@ -13,7 +13,7 @@
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank" class="token__preview">
-            <img :src="(token?.display_uri || token?.thumbnail_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
+            <img :src="(token?.display_uri || token?.thumbnail_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" lazy="true" />
           </a>
           <div class="token__info">
             <a :href="token.url" target="_blank">{{ token.name }}</a>
@@ -33,7 +33,7 @@
       </ul>
     </div>
 
-    <div class="load-more"><button v-if="isLoadMoreDisplayed" @click="loadMore" class="load-more__button">Load More</button></div>
+    <div class="load-more"><button v-if="isLoadMoreDisplayed" @click="loadMore" class="load-more__button cta">Load More</button></div>
   </div>
 </template>
 
@@ -139,7 +139,7 @@ const props = defineProps<{
 }>();
 
 const { walletAddress, collectionImage, collectionDescription } = props;
-const limit = ref(20);
+const limit = ref(6);
 const offset = ref(0);
 
 const queryVariables = { walletAddress: walletAddress, limit: limit.value, offset: offset.value };
