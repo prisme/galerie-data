@@ -1,12 +1,35 @@
-<template>
-  <div class="header">
-    <img :src="logo" width="500" height="82" alt="" class="logo" />
-  </div>
-</template>
-
 <script setup>
-const logo = "https://cdn.shopify.com/s/files/1/0660/8165/3002/files/GALERIE_DATA_LOGO_WHITE.png?v=1674927996&width=500";
+defineProps({
+  logo: {
+    type: Object,
+    default: () => {},
+  },
+  navigation: {
+    type: Array,
+    default: () => [],
+  },
+  name: {
+    type: Array,
+    default: () => [],
+  },
+});
 </script>
+
+<template>
+  <header class="header">
+    <PrismicImage :field="logo" class="logo" />
+
+    <nav v-if="navigation.length" class="nav">
+      <ul>
+        <li v-for="item in navigation">
+          <PrismicLink :field="item.link">
+            <PrismicRichText :field="item.name" />
+          </PrismicLink>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</template>
 
 <style scoped>
 .header {
@@ -22,5 +45,12 @@ const logo = "https://cdn.shopify.com/s/files/1/0660/8165/3002/files/GALERIE_DAT
 .logo {
   max-width: 250px;
   height: auto;
+}
+
+.nav ul {
+  list-style: none;
+}
+.nav a {
+  color: #fff;
 }
 </style>
