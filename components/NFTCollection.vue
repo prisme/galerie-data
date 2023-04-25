@@ -13,7 +13,7 @@
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank" class="token__preview">
-            <img :src="(token?.thumbnail_uri || token?.display_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
+            <img :src="(token?.display_uri || token?.thumbnail_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
           </a>
           <div class="token__info">
             <a :href="token.url" target="_blank">{{ token.name }}</a>
