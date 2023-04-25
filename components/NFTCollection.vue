@@ -7,28 +7,27 @@
     </div>
 
     <div v-if="creator?.address">
-      <h2>Creator</h2>
       <a :href="`https://objkt.com/profile/${creator?.address}`">{{ creator?.alias }}</a>
       <p>{{ creator?.description }}</p>
     </div>
 
     <div v-if="transformedTokens.length">
-      <h2>Tokens</h2>
+      <h2>NFT Limited Editions</h2>
       <ul class="tokens">
         <li v-for="token in transformedTokens" :key="token.token_id" class="token">
           <a :href="token.url" target="_blank">
             <img :src="(token?.thumbnail_uri || token?.display_uri).replace('ipfs://', 'https://ecrantotal.twic.pics/')" :alt="token.name" />
           </a>
           <div>
-            name: <a :href="token.url" target="_blank">{{ token.name }}</a>
+            <a :href="token.url" target="_blank">{{ token.name }}</a>
           </div>
-          <div>
+          <div v-if="token.listings_active?.seller.address">
             seller:
             <a :href="`https://objkt.com/profile/${token.listings_active?.seller.address}`">{{ token.listings_active?.seller.alias }}</a>
           </div>
-          <div>price: {{ token.listings_active?.price_xtz }}</div>
+          <div v-if="token.listings_active?.price_xtz">price: {{ token.listings_active?.price_xtz }}</div>
           <div>supply: {{ token.supply }}</div>
-          <div>amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
+          <div v-if="token.listings_active?.amount && token.listings_active?.amount_left">amount: {{ token.listings_active?.amount }} listed - {{ token.listings_active?.amount_left }} left</div>
         </li>
       </ul>
     </div>
