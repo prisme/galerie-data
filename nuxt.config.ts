@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts"],
+  modules: ["@nuxtjs/apollo", "@nuxtjs/google-fonts", "@nuxtjs/prismic"],
 
   css: ["normalize.css/normalize.css", "@/css/main.css"],
 
@@ -17,4 +17,6 @@ export default defineNuxtConfig({
       Jost: [300, 600],
     },
   },
+
+  prismic: { endpoint: "galeriedata" },
 });
