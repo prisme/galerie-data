@@ -20,6 +20,7 @@
     padding: 0;
     margin: 4rem 0;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .footer-block.grid__item:first-child {

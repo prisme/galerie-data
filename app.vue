@@ -55,6 +55,7 @@ const collection = index.value.body.find((item) => item.slice_type === "collecti
             data-mce-fragment="1"
             data-mce-href="mailto:contact@galeriedata.com"
             target="_blank"
+            style="color: #ffffff"
             ><span data-mce-fragment="1">contact@galeriedata.com</span></a
           ><br data-mce-fragment="1" />phone : +33 (6) 18 52 26 86
         </div>
