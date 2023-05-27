@@ -80,6 +80,26 @@ interface CollectionResult {
   fa: Collection[];
 }
 
+interface CollectionImage {
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  alt: string | null;
+  copyright: string | null;
+  url: string;
+  small: {
+    dimensions: {
+      width: number;
+      height: number;
+    };
+    alt: string | null;
+    copyright: string | null;
+    url: string;
+  };
+}
+
+// https://public-api-v3-20221206.objkt.com/explore/
 const collectionQuery = gql`
   query objkts($walletAddress: String!, $limit: Int = 100, $offset: Int = 0) {
     fa(where: { contract: { _eq: $walletAddress } }) {
@@ -91,7 +111,7 @@ const collectionQuery = gql`
         address
         description
       }
-      tokens(limit: $limit, offset: $offset, where: { supply: { _gte: "1" } }) {
+      tokens(limit: $limit, offset: $offset, where: { supply: { _gte: "1" }, order_by: { last_listed: desc_nulls_last } }) {
         name
         fa_contract
         token_id
@@ -112,25 +132,6 @@ const collectionQuery = gql`
     }
   }
 `;
-
-interface CollectionImage {
-  dimensions: {
-    width: number;
-    height: number;
-  };
-  alt: string | null;
-  copyright: string | null;
-  url: string;
-  small: {
-    dimensions: {
-      width: number;
-      height: number;
-    };
-    alt: string | null;
-    copyright: string | null;
-    url: string;
-  };
-}
 
 const props = defineProps<{
   walletAddress: string;
