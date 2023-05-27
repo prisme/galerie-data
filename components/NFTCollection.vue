@@ -111,7 +111,7 @@ const collectionQuery = gql`
         address
         description
       }
-      tokens(limit: $limit, offset: $offset, where: { supply: { _gte: "1" }, order_by: { last_listed: desc_nulls_last } }) {
+      tokens(limit: $limit, offset: $offset, where: { supply: { _gte: "1" } }, order_by: { last_listed: desc }) {
         name
         fa_contract
         token_id
