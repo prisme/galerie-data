@@ -27,7 +27,7 @@
           </div>
 
           <div class="token__cta">
-            <a :href="token.url" target="_blank" class="cta"> BUY ON OBJKT </a>
+            <a :href="token.url" target="_blank" class="cta"> SEE ON OBJKT </a>
           </div>
         </li>
       </ul>
